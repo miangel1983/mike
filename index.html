@@ -78,11 +78,11 @@
 			
 			
 			function populateDB(tx) {
-				tx.executeSql('DROP TABLE IF EXISTS DEMO');
-				tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id unique, data)');
-				tx.executeSql('INSERT INTO DEMO (id, data) VALUES (1, "First row")');
-				tx.executeSql('INSERT INTO DEMO (id, data) VALUES (2, "Second row")');
-				tx.executeSql('INSERT INTO DEMO (id, data) VALUES (3, "third row")');
+				
+				tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (data)');
+				tx.executeSql('INSERT INTO DEMO ( data) VALUES ("uno row")');
+				tx.executeSql('INSERT INTO DEMO ( data) VALUES ("dos row")');
+				tx.executeSql('INSERT INTO DEMO ( data) VALUES ("tres row")');
 			}
 
 			// Transaction error callback
@@ -141,7 +141,7 @@
 		
 		<div id="mine" class="blink">
          
-			<button type="button" onclick="onDeviceReady()">Boton</button>
+			<button type="button" onclick="onDeviceReady()">Boton Mike</button>
        
         </div>
 		
