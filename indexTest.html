@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.min.css" />
+	
+        
+		
+		 <script type="text/javascript" charset="utf-8">
+		 
+			 document.addEventListener("deviceready", onDeviceReady, false);
+		
+            function LoginButton_onclick() {
+			alert("LoginButton_onclick");
+                $.ajax({
+                       type: "POST",
+                       contentType: "application/json; charset=utf-8",
+                       dataType: "json",
+                       url:    "http://192.168.254.36/ws/ws.php",
+					   data: '{}',
+                       success: function(msg) {
+					   console.log(msg);
+                       /*jsonArray = $.parseJSON(msg.d);*/
+                       var $ul = $( '<ul id="details">' );
+                       
+                       $("#details").append('<li id="1" name="head" >'+msg.msg+'</li>' );
+                       
+                       $('#details').listview('refresh');
+                       },
+                       error: function(msg) {
+                       alert("Error: " + msg.toString());
+                      }
+                       });
+
+            }
+			
+			function onDeviceReady() {
+				if (navigator.geolocation)
+				{
+					alert("si soporta geo");
+				}
+				else
+				{
+					alert("NO soporta geo");
+				}
+			
+			
+				var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+				db.transaction(populateDB, errorCB, successCB);
+			}
+			
+			
+			function clearDB() {
+			alert("clearDB");
+				var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+				db.transaction(clear, errorCB, successClear);
+			}
+			
+			function clear(tx) {
+				tx.executeSql('delete from DEMO');
+			}
+			
+			function successClear() {
+				 var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+				db.transaction(queryDB, errorCB);
+			}
+			
+			function populateDB(tx) {
+				
+				tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (data)');
+				tx.executeSql('INSERT INTO DEMO ( data) VALUES ("uno row")');
+				tx.executeSql('INSERT INTO DEMO ( data) VALUES ("dos row")');
+				tx.executeSql('INSERT INTO DEMO ( data) VALUES ("tres row")');
+			}
+
+			// Transaction error callback
+			//
+			function errorCB(tx, err) {
+				alert("Error processing SQL: "+err);
+			}
+
+			// Transaction success callback
+			//
+			function successCB() {
+				 var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+				db.transaction(queryDB, errorCB);
+			}
+			
+			function queryDB(tx) {
+				tx.executeSql('SELECT * FROM DEMO', [], querySuccess, errorCB);
+			}
+			
+			function querySuccess(tx, results) {
+				var len = results.rows.length;
+				console.log("DEMO table: " + len + " rows found.");
+				for (var i=0; i<len; i++){
+					console.log("Row = " + i + " ID = " + results.rows.item(i).id + " Data =  " + results.rows.item(i).data);
+					$("#details").append('<li id="1" name="head" >'+results.rows.item(i).data+'</li>' );
+                   
+				}
+			}
+
+			
+			 function alerta() {
+				alert("mensaje");
+			 }
+
+
+            </script>
+		
+		
+		
+    <title>Hello World</title>
+</head>
+
+<body>
+
+
+    <div class="app">
+        <h1>PhoneGap</h1>
+        <div id="deviceready" class="blink">
+            <p class="event listening">Connecting to Device</p>
+            <p class="event received">Device is Ready</p>
+        </div>
+		
+		<div id="mine" class="blink">
+            <p class="event listening">Mike test1</p>            
+        </div>
+		
+		<div id="mine" class="blink">
+            <a href="indexResp.html">IR</a>
+        </div>
+		
+		<div>
+		    <input type="file" name="foto" accept="image/*" capture="camera">
+        </div>
+		
+		<div>
+          <input type="file" accept="video/*" capture="camcorder">
+        </div>
+		
+		<div>
+          <input type="file" accept="audio/*" capture="microphone">
+        </div>
+		
+		<div id="DEMO">
+                    <input id="LoginButton" type="button" value="WebService" onclick="LoginButton_onclick()" />
+		</div>
+		
+		<div id="clear">
+                    <input id="clearBD" type="button" value="Limpiar" onclick="clearDB()" />
+		</div>
+		
+		 <div id="divList" data-role="content">
+             <ul id="details" data-role="listview" data-inset="true"></ul>
+         </div>
+		
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+	 <script  src="phonegap.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+	 <script type="text/javascript" src="js/jquery.mobile-1.2.0.min.js"></script>
+	  <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+		
+    </script>
+</body>
+
+</html>

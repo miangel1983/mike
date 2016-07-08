@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+		<script type="text/javascript" src="js/jquery.mobile-1.2.0.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+
+		<script>
+	window.onload = getGeo();
+	var $latitud = "";
+	var $longitud = "";
+	function getGeo() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition, showError);
+		}
+	}
+	
+	function exit() {
+		window.location = "index.html";
+	}
+
+	function sendEncuesta() {
+
+		var x = document.getElementsByClassName("send");
+		var edad = document.getElementById("edad").value;
+		var genero = document.getElementById("genero").value;
+		var url = "http://189.213.5.252:1180/ws/encuestaPost.php";
+		var params = "";
+		for (i = 0; i < x.length; i++) {
+
+			if (x[i].type == "radio") {
+				if (x[i].checked)
+					params = params + x[i].name + "=" + x[i].value + "&";
+			} else {
+				params = params + x[i].name + "=" + x[i].value + "&";
+			}
+
+		}
+
+		params = params + "longitud=" + $longitud + "&latitud=" + $latitud;
+		var fd = new FormData();
+		var xmlHTTP = new XMLHttpRequest();
+		xmlHTTP.onreadystatechange = function() {
+			if (xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
+				//alert(xmlHTTP.responseText);
+				alert("Operación realizada exitosamente");
+				window.location = "Principal.html";
+			}
+		}
+
+		xmlHTTP.open("POST", url, true);
+		xmlHTTP.setRequestHeader("Content-type",
+				"application/x-www-form-urlencoded");
+		xmlHTTP.send(params);
+	}
+
+	function sendDataPost() {
+		if (validaDatos()) {
+			uploadFile();
+
+		}
+
+	}
+
+	function showPosition(position) {
+		$latitud = position.coords.latitude;
+		$longitud = position.coords.longitude;
+	}
+
+	function showError(error) {
+		switch (error.code) {
+		case error.PERMISSION_DENIED:
+			alert("El usuario ha denegado el permiso a la localización");
+			break;
+		case error.POSITION_UNAVAILABLE:
+			alert("La información de la localización no está disponible.");
+			break;
+		case error.TIMEOUT:
+			alert("El tiempo de espera para buscar la localización ha expirado.");
+			break;
+		case error.UNKNOWN_ERROR:
+			alert("Ha ocurrido un error desconocido.");
+			break;
+		}
+	}
+	function sendDataGet() {
+		alert("Get");
+		var x = document.getElementsByClassName("send");
+		var edad = document.getElementById("edad").value;
+		var genero = document.getElementById("genero").value;
+		var params = "";
+		for (i = 0; i < x.length; i++) {
+			params = params + x[i].name + "=" + x[i].value + "&";
+		}
+		alert("params: " + params);
+		//var url = "http://189.213.5.252:1180/ws/encuestaGet.php?edad=" + edad + "&genero="+ genero;
+		var url = "http://189.213.5.252:1180/ws/encuestaGet.php?" + params;
+		var fd = new FormData();
+		var xmlHTTP = new XMLHttpRequest();
+
+		xmlHTTP.onreadystatechange = function() {
+			if (xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
+				alert(xmlHTTP.responseText);
+			}
+		}
+		xmlHTTP.open("GET", url, true);
+		xmlHTTP.send();
+	}
+
+	function validaDatos() {
+		var $genero = document.getElementById("genero").value;
+		var $edad = document.getElementById("edad").value;
+		var $p2 = document.getElementById("p2").value;
+		var $p3 = document.getElementById("p3").value;
+		var $p4 = document.getElementById("p4").value;
+		var $p5 = document.getElementById("p5").value;
+		var $p6 = document.getElementById("p6").value;
+		var $p7 = document.getElementById("p7").value;
+		var $p8 = document.getElementById("p8").value;
+		var $p9 = document.getElementById("p9").value;
+		var $p10 = document.getElementById("p10").value;
+		var $p11 = document.getElementById("p11").value;
+		var $p11 = document.getElementById("nombre").value;
+		if ($genero == '-1') {
+			alert("Se debe de especificar el genero");
+			return false;
+		}
+
+		if ($edad == null || $edad == '') {
+			alert("Se debe de especificar la edad");
+			return false;
+		}
+
+		if ($p2 == null || $p2 == '-1') {
+			alert("Favor de responder a la pregunta 2");
+			return false;
+		}
+
+		if ($p3 == null || $p3 == '-1') {
+			alert("Favor de responder a la pregunta 3");
+			return false;
+		}
+
+		if ($p4 == null || $p4 == '-1') {
+			alert("Favor de responder a la pregunta 4");
+			return false;
+		}
+
+		if ($p5 == null || $p5 == '-1') {
+			alert("Favor de responder a la pregunta 5");
+			return false;
+		}
+
+		if ($p6 == null || $p6 == '-1') {
+			alert("Favor de responder a la pregunta 6");
+			return false;
+		}
+
+		if ($p7 == null || $p7 == '-1') {
+			alert("Favor de responder a la pregunta 7");
+			return false;
+		}
+
+		if ($p8 == null || $p8 == '-1') {
+			alert("Favor de responder a la pregunta 8");
+			return false;
+		}
+
+		if ($p9 == null || $p9 == '-1') {
+			alert("Favor de responder a la pregunta 9");
+			return false;
+		}
+
+		if ($p10 == null || $p10 == '-1') {
+			alert("Favor de responder a la pregunta 10");
+			return false;
+		}
+
+		if ($p11 == null || $p11 == '-1') {
+			alert("Favor de responder a la pregunta 11");
+			return false;
+		}
+
+		return true;
+
+	}
+
+	function selectedFile() {
+		var archivoSeleccionado = document.getElementById("imagen");
+		var file = archivoSeleccionado.files[0];
+		if (file) {
+			var fileSize = 0;
+			if (file.size > 1048576)
+				fileSize = (Math.round(file.size * 100 / 1048576) / 100)
+						.toString()
+						+ ' MB';
+			else
+				fileSize = (Math.round(file.size * 100 / 1024) / 100)
+						.toString()
+						+ ' Kb';
+
+			var divfileSize = document.getElementById('fileSize');
+			var divfileType = document.getElementById('fileType');
+			var divfileName = document.getElementById('fileName');
+			divfileSize.innerHTML = 'Tamaño: ' + fileSize;
+			divfileType.innerHTML = 'Tipo: ' + file.type;
+			divfileName.innerHTML = 'Nombre: ' + file.name;
+
+		}
+	}
+
+	function uploadFile() {
+		var url = "http://189.213.5.252:1180/ws/subir.php";
+		var archivoSeleccionado = document.getElementById("imagen");
+		var file = archivoSeleccionado.files[0];
+		var fd = new FormData();
+		fd.append("imagen", file);
+		var xmlHTTP = new XMLHttpRequest();
+		xmlHTTP.upload.addEventListener("progress", progressFunction, false);
+		xmlHTTP.addEventListener("load", transferCompleteFunction, false);
+		xmlHTTP.addEventListener("error", uploadFailed, false);
+		xmlHTTP.addEventListener("abort", uploadCanceled, false);
+
+		xmlHTTP.onreadystatechange = function() {
+			if (xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
+				sendEncuesta();
+			}
+		}
+		xmlHTTP.open("POST", url, true);
+		xmlHTTP.send(fd);
+	}
+
+	function progressFunction(evt) {
+		var progressBar = document.getElementById("progressBar");
+		var percentageDiv = document.getElementById("percentageCalc");
+		if (evt.lengthComputable) {
+			progressBar.max = evt.total;
+			progressBar.value = evt.loaded;
+			percentageDiv.innerHTML = Math.round(evt.loaded / evt.total * 100)
+					+ "%";
+		}
+	}
+
+	function loadStartFunction(evt) {
+		alert('Comenzando a subir el archivo');
+	}
+
+	function transferCompleteFunction(evt) {
+		var progressBar = document.getElementById("progressBar");
+		var percentageDiv = document.getElementById("percentageCalc");
+		progressBar.value = 100;
+		percentageDiv.innerHTML = "100%";
+	}
+
+	function uploadFailed(evt) {
+		alert("Hubo un error al subir el archivo.");
+	}
+
+	function uploadCanceled(evt) {
+		alert("La operación se canceló o la conexión fue interrunpida.");
+	}
+</script>
+
+	</head>
+
+
+
+	<body style="padding: 10px 0px 0px 0px; margin: 15px 0px 0px 12px;">
+
+		<form action="http://189.213.5.252:1180/ws/encuestaSubmit.php"
+			method="post">
+
+			<div>
+				A. Sexo
+			</div>
+
+			<div class="select">
+				<select name="genero" id="genero" class="send">
+					<option value="-1">
+						Seleccione
+					</option>
+					<option value="1">
+						Hombre
+					</option>
+					<option value="2">
+						Mujer
+					</option>
+				</select>
+			</div>
+
+			<br>
+
+			<div>
+				B. &#191;Cu&aacute;ntos a&ntilde;os cumplidos tiene usted?
+			</div>
+
+			<div>
+				<input type="text" name="edad" id="edad" class="send" style=" width:90%; height: 20px;"/>
+			</div>
+
+			<br>
+
+			<div>
+				1. &#191;Tiene usted credencial para votar de aqu&iacute; de la
+				SECCION?
+			</div>
+
+			<div>
+				<input type="radio" name="p1" value="1" class="send">
+				Si
+				<input type="radio" name="p1" value="2" class="send">
+				No
+				<input type="radio" name="p1" value="99" class="send">
+				Ns/Nc
+			</div>
+
+			<br>
+
+			<div>
+				2. &#191;Cu&aacute;l es el medio de comunicaci&oacute;n LOCAL que
+				m&aacute;s utiliza para, informarse de lo que pasa en la
+				pol&iacute;tica?
+			</div>
+
+			<div class="select">
+				<select name="p2" id="p2" class="send">
+					<option value="-1">
+						Seleccione
+					</option>
+					<option value="1">
+						Peri&oacute;dicos o revistas (prensa escrita)
+					</option>
+					<option value="2">
+						Radio (noticieros)
+					</option>
+					<option value="3">
+						TV (noticieros)
+					</option>
+					<option value="4">
+						Noticias en internet / Redes sociales (facebook, twitter)
+					</option>
+					<option value="5">
+						Comentarios de amigos o familiares
+					</option>
+					<option value="98">
+						Ninguno (pase a la 3)
+					</option>
+					<option value="99">
+						Ns/Nc
+					</option>
+
+				</select>
+			</div>
+
+			<br>
+
+			<div>
+				3. &#191;Cu&aacute;l es el medio de comunicaci&oacute;n LOCAL que
+				m&aacute;s utiliza para, informarse de lo que pasa en la
+				pol&iacute;tica?
+			</div>
+
+			<div class="select">
+				<select name="p3" id="p3" class="send">
+					<option value="-1">
+						Seleccione
+					</option>
+					<option value="1">
+						Educaci&oacute;n
+					</option>
+					<option value="2">
+						Salud
+					</option>
+					<option value="3">
+						Desempleo
+					</option>
+					<option value="4">
+						Bajos salarios
+					</option>
+					<option value="5">
+						Inseguridad
+					</option>
+					<option value="6">
+						Corrupci&oacute;n
+					</option>
+					<option value="7">
+						Agua potable
+					</option>
+					<option value="8">
+						Obras publicas
+					</option>
+					<option value="9">
+						Faltan apoyos al campo
+					</option>
+					<option value="10">
+						Malos gobernates
+					</option>
+					<option value="11">
+						Drenaje
+					</option>
+					<option value="12">
+						Luz el&eacute;ctrica
+					</option>
+					<option value="13">
+						Basura
+					</option>
+					<option value="14">
+						Clandestinaje
+					</option>
+					<option value="15">
+						Drogradicci&oacute;n
+					</option>
+					<option value="16">
+						Pavimentaci&oacute;n (calles y carreteras)
+					</option>
+					<option value="17">
+						Caminos
+					</option>
+					<option value="18">
+						Falta de servicios p&uacute;blicos
+					</option>
+					<option value="19">
+						Pol&iacute;ticos
+					</option>
+					<option value="20">
+						Contaminaci&oacute;n
+					</option>
+					<option value="21">
+						Inundaci&oacute;n
+					</option>
+					<option value="22">
+						Pobreza
+					</option>
+					<option value="00">
+						Otro
+					</option>
+					<option value="99">
+						Ns/Nc
+					</option>
+
+				</select>
+			</div>
+
+			<br>
+
+
+			<div>
+				&#191;Qu&eacute; opini&oacute;n tiene de...
+			</div>
+
+			<div style="width: 100%;">
+				<table style=" width: 100%;">
+					<tr>
+						<td style=" width:2%;">4.</td>
+						<td style=" width:6%;">
+							<img src="img/pan.png">
+						</td>
+						<td>
+							<div class="select">
+								<select name="p4" id="p4" class="send">
+									<option value="-1">
+										Seleccione
+									</option>
+									<option value="1">
+										Muy buena
+									</option>
+									<option value="2">
+										Buena
+									</option>
+									<option value="3">
+										Ni buena, ni mala (regular)
+									</option>
+									<option value="4">
+										Mala
+									</option>
+									<option value="5">
+										Muy mala
+									</option>
+									<option value="9">
+										Ns/Nc
+									</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td>5.</td>
+						<td>
+							<img src="img/pri.png">
+						</td>
+						<td>
+							<div class="select">
+								<select name="p5" id="p5" class="send">
+									<option value="-1">
+										Seleccione
+									</option>
+									<option value="1">
+										Muy buena
+									</option>
+									<option value="2">
+										Buena
+									</option>
+									<option value="3">
+										Ni buena, ni mala (regular)
+									</option>
+									<option value="4">
+										Mala
+									</option>
+									<option value="5">
+										Muy mala
+									</option>
+									<option value="9">
+										Ns/Nc
+									</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+
+
+					<tr>
+						<td>6.</td>
+						<td>
+							<img src="img/prd.png">
+						</td>
+						<td>
+							<div class="select">
+								<select name="p6" id="p6" class="send">
+									<option value="-1">
+										Seleccione
+									</option>
+									<option value="1">
+										Muy buena
+									</option>
+									<option value="2">
+										Buena
+									</option>
+									<option value="3">
+										Ni buena, ni mala (regular)
+									</option>
+									<option value="4">
+										Mala
+									</option>
+									<option value="5">
+										Muy mala
+									</option>
+									<option value="9">
+										Ns/Nc
+									</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+
+
+					<tr>
+						<td>7.</td>
+						<td>
+							<img src="img/pt.png">
+						</td>
+						<td>
+							<div class="select">
+								<select name="p7" id="p7" class="send">
+									<option value="-1">
+										Seleccione
+									</option>
+									<option value="1">
+										Muy buena
+									</option>
+									<option value="2">
+										Buena
+									</option>
+									<option value="3">
+										Ni buena, ni mala (regular)
+									</option>
+									<option value="4">
+										Mala
+									</option>
+									<option value="5">
+										Muy mala
+									</option>
+									<option value="9">
+										Ns/Nc
+									</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+
+
+					<tr>
+						<td>8.</td>
+						<td>
+							<img src="img/pvem.png">
+						</td>
+						<td>
+							<div class="select">
+								<select name="p8" id="p8" class="send">
+									<option value="-1">
+										Seleccione
+									</option>
+									<option value="1">
+										Muy buena
+									</option>
+									<option value="2">
+										Buena
+									</option>
+									<option value="3">
+										Ni buena, ni mala (regular)
+									</option>
+									<option value="4">
+										Mala
+									</option>
+									<option value="5">
+										Muy mala
+									</option>
+									<option value="9">
+										Ns/Nc
+									</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td>9.</td>
+						<td>
+							<img src="img/mov.png">
+						</td>
+						<td>
+							<div class="select">
+								<select name="p9" id="p9" class="send">
+									<option value="-1">
+										Seleccione
+									</option>
+									<option value="1">
+										Muy buena
+									</option>
+									<option value="2">
+										Buena
+									</option>
+									<option value="3">
+										Ni buena, ni mala (regular)
+									</option>
+									<option value="4">
+										Mala
+									</option>
+									<option value="5">
+										Muy mala
+									</option>
+									<option value="9">
+										Ns/Nc
+									</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td>10.</td>
+						<td>
+							<img src="img/nueva.png">
+						</td>
+						<td>
+							<div class="select">
+								<select name="p10" id="p10" class="send">
+									<option value="-1">
+										Seleccione
+									</option>
+									<option value="1">
+										Muy buena
+									</option>
+									<option value="2">
+										Buena
+									</option>
+									<option value="3">
+										Ni buena, ni mala (regular)
+									</option>
+									<option value="4">
+										Mala
+									</option>
+									<option value="5">
+										Muy mala
+									</option>
+									<option value="9">
+										Ns/Nc
+									</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td>11.</td>
+						<td>
+							<img src="img/morena.png">
+						</td>
+						<td>
+							<div class="select">
+								<select name="p11" id="p11" class="send">
+									<option value="-1">
+										Seleccione
+									</option>
+									<option value="1">
+										Muy buena
+									</option>
+									<option value="2">
+										Buena
+									</option>
+									<option value="3">
+										Ni buena, ni mala (regular)
+									</option>
+									<option value="4">
+										Mala
+									</option>
+									<option value="5">
+										Muy mala
+									</option>
+									<option value="9">
+										Ns/Nc
+									</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+				</table>
+
+			</div>
+
+
+			<br>
+
+			<div>
+				&#191;Cu&aacute;l es su nombre?
+			</div>
+
+			<div>
+				<input type="text" name="nombre" id="nombre" class="send" style=" width:90%;  height: 20px;"/>
+			</div>
+
+			<br>
+			<br>
+			<br>
+			<div id="wrap">
+				<input type="file" id="imagen" name="imagen" class="rm-input"
+					onchange="selectedFile();" />
+				<div class="field">
+					<ul class="options">
+						<li>
+							<div id="fileSize"></div>
+						</li>
+						<li>
+							<div id="fileType"></div>
+						</li>
+						<li>
+							<div id="fileName"></div>
+						</li>
+
+					</ul>
+				</div>
+				<progress id="progressBar" value="0" max="100" class="rm-progress"></progress>
+				<div id="percentageCalc"></div>
+			</div>
+
+
+
+
+			<br>
+			<br>
+			<br>
+			<input type="button" value="Enviar" onclick="sendDataPost()"
+				class="btnFn" />
+			<br>
+			<br>
+			<br>
+			
+			<input type="button" value="Salir" onclick="exit()"
+				class="btnFn" />
+				
+			<br>
+			<br>
+			<br>
+
+		</form>
+
+	</body>
+</html>
+

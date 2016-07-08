@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>Encuestas</title>
+		<link rel="stylesheet" href="css/framework7.ios.min.css">
+		<script src="http://maps.googleapis.com/maps/api/js"></script>
+
+		<script>
+			function geoloc() {
+				d = document.getElementById("demo");
+				if (navigator.geolocation) {
+					d.innerHTML = "<p>Tu dispositivo soporta la geolocalización.</p>";
+					navigator.geolocation.getCurrentPosition(showPosition, showError);
+				} else {
+					d.innerHTML = "<p>Lo sentimos, tu dispositivo no admite la geolocaización.</p>";
+				}
+			}
+		
+			function showPosition(position) {
+				latitud = position.coords.latitude;
+				longitud = position.coords.longitude;
+				d.innerHTML += "<p>Latitud: " + latitud + "</p>";
+				d.innerHTML += "<p>Longitud: " + longitud + "</p>";
+		
+				var mapProp = {
+					center : new google.maps.LatLng(latitud, longitud),
+					zoom : 15,
+					mapTypeId : google.maps.MapTypeId.ROADMAP
+				};
+				var map = new google.maps.Map(document.getElementById("googleMap"),
+						mapProp);
+		
+			}
+			function showError(error) {
+				switch (error.code) {
+				case error.PERMISSION_DENIED:
+					d.innerHTML += "<p>El usuario ha denegado el permiso a la localización.</p>"
+					break;
+				case error.POSITION_UNAVAILABLE:
+					d.innerHTML += "<p>La información de la localización no está disponible.</p>"
+					break;
+				case error.TIMEOUT:
+					d.innerHTML += "<p>El tiempo de espera para buscar la localización ha expirado.</p>"
+					break;
+				case error.UNKNOWN_ERROR:
+					d.innerHTML += "<p>Ha ocurrido un error desconocido.</p>"
+					break;
+				}
+			}
+		
+			function goToCam() {
+				window.location = "UseCam.html";
+			}
+		</script>
+	</head>
+
+	<body>
+		 <div class="views">
+			<div id="googleMap" style="width: 100%; height: 50%;" class="app"></div>
+			<div id="demo"></div>
+			 <div class="view view-main">
+		        <div class="pages navbar-through toolbar-through">
+		          <div data-page="index" class="page">
+		            <div class="page-content">
+		              <div class="list-block">
+		                <ul>
+							 <li><a  href="javascript:geoloc();" class="item-link item-content">
+		                      <div class="item-inner"> 
+		                        <div class="item-title">Ver geolocalizaci&oacute;n</div>
+		                      </div></a></li>
+		                  <li><a href="encuesta1.html" class="item-link item-content">
+		                      <div class="item-inner"> 
+		                        <div class="item-title">Realizar encuesta</div>
+		                      </div></a></li>
+		                  <li><a href="upload.html" data-context-name="cars" class="item-link item-content">
+		                      <div class="item-inner">
+		                        <div class="item-title">Subir foto</div>
+		                      </div></a></li>
+		                  <li><a href="index.html" class="item-link item-content">
+		                      <div class="item-inner">
+		                        <div class="item-title">Salir</div>
+		                      </div></a></li>
+		                </ul>
+		              </div>
+		            </div>
+		          </div>
+		        </div>
+		      </div>
+
+		</div>
+	</body>
+</html>
+
